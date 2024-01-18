@@ -17,21 +17,28 @@ export default function Student() {
     const [address, setAddress] = useState('')
     const classes = useStyles();
 
-    const handleClick = (e) => {
-        e.preventDefault()
-        const Student = { name, address }
-        console.log(Student)
+    const handleClick = async (e) => {
+        e.preventDefault();
+        const student = { name, address };
 
-        fetch("https://localhost:8080/student/add", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(Student)
-        }).then(() => {
-            console.log("New Student added")
-        })
-    }
+        try {
+            const response = await fetch("http://localhost:8080/student/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(student),
+            });
+
+            if (response.ok) {
+                console.log("New Student added");
+            } else {
+                throw new Error("Request failed with status: " + response.status);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
         <Container>
